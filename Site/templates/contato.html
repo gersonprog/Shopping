@@ -1,4 +1,41 @@
 {% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+
+{% block Titulo %}
+Contato
+{% endblock Titulo %}
+
+{% block Conteudo %}
+    <!-- Header-->
+    <header class="bg-light py-1">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-dark">
+                <h1 class="display-4 fw-bolder">Contato</h1>
+            </div>
+        </div>
+    </header>
+    <!-- Section-->
+    <section class="py-5">
+        <div class="container">
+            {% if mensagem %}
+                <div class="alert alert-sucess">
+                <p> {{ mensagem }} </p>
+            {% endif %}
+	        <form action="{% url 'contato' %}" method="POST">
+                {% csrf_token %}
+                <div class="mx-auto">
+                {{ form_contato|crispy }}
+                <input type="submit" value="Enviar" class="btn btn-success">
+                </div>
+            </form>
+        </div>
+    </section>
+
+{% endblock Conteudo %}
+
+
+{% comment %} {% extends 'base.html' %}
 
 {% block Titulo %}
 Contato
@@ -20,4 +57,4 @@ Contato
         </div>
     </section>
 
-{% endblock Conteudo %}
+{% endblock Conteudo %} {% endcomment %}

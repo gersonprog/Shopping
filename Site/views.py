@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from Site.forms import ClienteForm
 from Site.models import Departamento, Produto
+from django.core.mail import send_mail
 
 # Create your views here.
 
@@ -58,27 +59,57 @@ def institucional(request):
 
 def contato(request):
     departamentos = Departamento.objects.all()
-    context = {
-        'departamentos': departamentos
-    }
-    return render (request, 'contato.html', context)
-
-def cadastro(request):
-    departamentos = Departamento.objects.all()
+    mensagem = ""
 
     if request.method == "POST":
-        formulario = ClienteForm(request.POST)
-        if formulario.is_valid():
-            cliente = formulario.save()
-            formulario = ClienteForm()
-
+        nome = request.POST['nome']
+        telefone = request.POST['telefone']
+        assunto = request.POST['assunto']
+        mensagem = request.POST['mensagem']
+        remetente = request.POST['email']
+        destinatario = ['gersonnetw@gmail.com']
+        corpo = f"Nome: {nome} \nTelefone: {telefone}  \nMensagem: {mensagem}"
+    
+        try:
+            send_mail(assunto, corpo, remetente, destinatario )
+            mensagem = 'E-mail enviado com sucesso!'
+        except:
+            mensagem = 'Erro ao enviar e-mail!'
     else:
-        formulario = ClienteForm()
-
-    formulario = ClienteForm()
+        formulario = ContatoForm()
 
     context = {
         'departamentos': departamentos,
-        'form_cliente': formulario
+        'form_contato' : formulario,
+        'mensagem' : mensagem
+    }
+
+    return render(request, 'contato.html', context)
+
+# def contato(request):
+#     departamentos = Departamento.objects.all()
+#     context = {
+#         'departamentos': departamentos
+#     }
+#     return render (request, 'contato.html', context)
+
+def cadastro(request):
+    departamentos = Departamento.objects.all()
+    mensagem=""
+    # quando envio formulario preenchido
+    if request.method == "POST":
+        formulario = ClienteForm(request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            formulario = ClienteForm()
+            mensagem = "Cliente cadastrado com sucesso"
+    # quando entro na tela vazia
+    else:
+        formulario = ClienteForm()
+
+    context = {
+        'departamentos': departamentos,
+        'form_cliente': formulario,
+        'mensagem'  : mensagem
     }
     return render (request, 'cadastro.html', context)
