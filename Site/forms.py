@@ -18,12 +18,12 @@ class ContatoForm(forms.Form):
      assunto = forms.CharField()
      mensagem = forms.CharField()
      
-     class Meta:
-         widgets = {
-             'telefone': forms.TextInput(attrs=
-                                         {'class':'phone_width_ddd'}),
-             'mensagem': forms.Textarea
-         }     
+    #  class Meta:
+    #      widgets = {
+    #          'telefone': forms.TextInput(attrs=
+    #                                      {'class':'phone_width_ddd'}),
+    #          'mensagem': forms.Textarea
+    #      }     
 
 # from django import from .forms import
 # from Site.models import Cliente

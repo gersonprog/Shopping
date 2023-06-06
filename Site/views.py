@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from Site.forms import ClienteForm
+from Site.forms import ClienteForm, ContatoForm
 from Site.models import Departamento, Produto
 from django.core.mail import send_mail
 
@@ -19,7 +19,7 @@ def produto_lista(request):
     departamentos = Departamento.objects.all()
     produtos = Produto.objects.all()
     context = {
-        'departamentos': departamentos,
+        
         'produtos' : produtos,
         'nome_categoria' : 'Todos os Produtos'
     }
@@ -30,8 +30,7 @@ def produto_lista_por_id(request, id):
     produtos_por_departamento = Produto.objects.filter(departamento_id = id)
     categoria = departamentos.get(id = id).nome
 
-    context = {
-        'departamentos': departamentos,
+    context = {        
         'produtos' : produtos_por_departamento,
         'nome_categoria' : categoria
 
@@ -39,7 +38,7 @@ def produto_lista_por_id(request, id):
     return render (request, 'produtos.html', context)
 
 def produto_detalhe(request, id):
-    departamentos = Departamento.objects.all()
+    
     produto = Produto.objects.get(id = id)
     produtos_relacionados = Produto.objects.filter(departamento_id = produto.departamento.id)
 
@@ -51,14 +50,10 @@ def produto_detalhe(request, id):
     return render (request, 'produto_detalhes.html', context)
 
 def institucional(request):
-    departamentos = Departamento.objects.all()
-    context = {
-        'departamentos': departamentos
-    }
     return render (request, 'empresa.html', context)
 
 def contato(request):
-    departamentos = Departamento.objects.all()
+    
     mensagem = ""
 
     if request.method == "POST":
@@ -75,8 +70,8 @@ def contato(request):
             mensagem = 'E-mail enviado com sucesso!'
         except:
             mensagem = 'Erro ao enviar e-mail!'
-    else:
-        formulario = ContatoForm()
+    
+    formulario = ContatoForm()
 
     context = {
         'departamentos': departamentos,
